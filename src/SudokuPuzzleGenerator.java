@@ -6,28 +6,34 @@ import java.util.Set;
 
 public class SudokuPuzzleGenerator {
 
-    public Cell[][] generatePuzzle(int size, BufferedReader reader, Set<Integer> validCharacters) throws IOException {
+    public Cell[][] generatePuzzle(int size, BufferedReader reader, Set<Integer> validCharacters)
+            throws IllegalCharacterException, IOException {
 
         Cell[][] puzzle = new Cell[size][size];
         String line;
-        int i = 0;
+        int row = 0;
         while ((line = reader.readLine()) != null){
             String []values = line.split(" ");
-            for(int j = 0; j < size; j++){
+            for(int col = 0; col < size; col++){
                 Set<Integer> possibleValues = new HashSet<>();
-                if(values[j].equals("-")){
+
+                if(!validCharacters.contains(values[col])){
+                    throw new IllegalCharacterException("Allowed character list doesn't have "+ values[col]);
+                }
+
+                if(values[col].equals("-")){
                     for(Integer value : validCharacters){
                         possibleValues.add(value);
                     }
                 }else{
-                    possibleValues.add(Integer.parseInt(values[j]));
+                    possibleValues.add(Integer.parseInt(values[col]));
                 }
 
                 Cell cell = new Cell(possibleValues);
-                puzzle[i][j] = cell;
+                puzzle[row][col] = cell;
             }
 
-            i++;
+            row++;
         }
 
         return puzzle;
