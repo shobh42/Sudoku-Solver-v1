@@ -13,11 +13,11 @@ public class Driver {
             final int PUZZLE_SIZE = Integer.valueOf(reader.readLine());
             Set<Integer> validCharacters = new ValidCharacterGenerator().generateValidSetOfCharacter(PUZZLE_SIZE, reader);
             Cell[][] puzzle = new SudokuPuzzleGenerator().generatePuzzle(PUZZLE_SIZE, reader, validCharacters);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        int i = 0;
     }
 
     private static void printPuzzle(Cell[][] puzzle){
