@@ -13,8 +13,7 @@ public class ValidCharacterGenerator {
         for(int i = 0; i < size; i++){
             validCharSet.add(Integer.parseInt(values[i]));
         }
-
-
+        
         return validCharSet;
     }
 }

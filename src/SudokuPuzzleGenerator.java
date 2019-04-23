@@ -18,7 +18,7 @@ public class SudokuPuzzleGenerator {
                 Set<Integer> possibleValues = new HashSet<>();
 
                 if(!validCharacters.contains(values[col])){
-                    throw new IllegalCharacterException("Allowed character list doesn't have "+ values[col]);
+                    throw new IllegalCharacterException("Valid character list does not have "+ values[col]);
                 }
 
                 if(values[col].equals("-")){

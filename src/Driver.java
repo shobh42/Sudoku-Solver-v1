@@ -7,13 +7,23 @@ public class Driver {
 
     public static void main(String[] args) {
 
+        new SudokuPuzzleValidator().isValid(null, 9);
         System.out.println("Enter the path of the puzzle file");
         try {
             BufferedReader reader = new SudokuPuzzleReader().readFile(null);
             final int PUZZLE_SIZE = Integer.valueOf(reader.readLine());
-            Set<Integer> validCharacters = new ValidCharacterGenerator().generateValidSetOfCharacter(PUZZLE_SIZE, reader);
-            Cell[][] puzzle = new SudokuPuzzleGenerator().generatePuzzle(PUZZLE_SIZE, reader, validCharacters);
-
+            boolean isPuzzleNotSolved = true;
+            while(isPuzzleNotSolved){
+                if(new PuzzleSizeValidator().isSizeIsValid(PUZZLE_SIZE)){
+                    Set<Integer> validCharacters = new ValidCharacterGenerator().generateValidSetOfCharacter(PUZZLE_SIZE, reader);
+                    Cell[][] puzzle = new SudokuPuzzleGenerator().generatePuzzle(PUZZLE_SIZE, reader, validCharacters);
+                    //isPuzzleNotSolved
+                }else {
+                    System.out.println("Puzzle size is not valid");
+                }
+            }
+        } catch (IllegalCharacterException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
