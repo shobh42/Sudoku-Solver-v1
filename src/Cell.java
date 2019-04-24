@@ -12,4 +12,8 @@ public class Cell {
     public int getSize(){
         return possibleValues.size();
     }
+
+    public Set<Integer> getCandidates(){
+        return possibleValues;
+    }
 }

@@ -17,15 +17,15 @@ public class SudokuPuzzleGenerator {
             for(int col = 0; col < size; col++){
                 Set<Integer> possibleValues = new HashSet<>();
 
-                if(!validCharacters.contains(values[col])){
-                    throw new IllegalCharacterException("Valid character list does not have "+ values[col]);
-                }
-
                 if(values[col].equals("-")){
                     for(Integer value : validCharacters){
                         possibleValues.add(value);
                     }
                 }else{
+                    if(!validCharacters.contains(Integer.parseInt(values[col]))){
+                        throw new IllegalCharacterException("Valid character list does not have "+ values[col]);
+                    }
+
                     possibleValues.add(Integer.parseInt(values[col]));
                 }
 

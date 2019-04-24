@@ -11,8 +11,11 @@ public class SudokuSolver {
         this.sudokuPuzzle = sudokuPuzzle;
     }
 
-    public List<List<Cell>> solve(){
+    public List<List<Integer>> solve(){
 
+        while(new RowEliminationStrategy().solve(size, sudokuPuzzle)){
+
+        }
 
         return null;
 
