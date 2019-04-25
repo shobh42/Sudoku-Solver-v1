@@ -10,7 +10,7 @@ public class Driver {
         System.out.println("Enter the path of the puzzle file");
         try {
            Cell[][] puzzle = new SudokuPuzzleReader().readFile(null);
-           new SudokuSolver(puzzle.length, puzzle).solve();
+           new SudokuSolver().solve(null);
         } catch (InvalidPuzzleException e) {
             e.printStackTrace();
         } catch (IllegalCharacterException e) {
