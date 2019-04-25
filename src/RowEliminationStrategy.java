@@ -3,7 +3,6 @@ public class RowEliminationStrategy implements SolvingStrategy
     @Override
     public boolean solve(int size, Cell[][] puzzle) {
 
-        boolean state = false;
         for(int currentRow = 0; currentRow < size; currentRow++){
 
             for(int currentCol = 0; currentCol < size; currentCol++){

@@ -9,24 +9,9 @@ public class Driver {
 
         System.out.println("Enter the path of the puzzle file");
         try {
-            BufferedReader reader = new SudokuPuzzleReader().readFile(null);
-            final int PUZZLE_SIZE = Integer.valueOf(reader.readLine());
-            boolean isPuzzleNotSolved = true;
-            while(isPuzzleNotSolved){
-                if(new PuzzleSizeValidator().isSizeIsValid(PUZZLE_SIZE)){
-                    Set<Integer> validCharacters = new ValidCharacterGenerator().generateValidSetOfCharacter(PUZZLE_SIZE, reader);
-                    Cell[][] puzzle = new SudokuPuzzleGenerator().generatePuzzle(PUZZLE_SIZE, reader, validCharacters);
-                    boolean isPuzzleValid = new SudokuPuzzleValidator(validCharacters, puzzle, PUZZLE_SIZE).isValid();
-                    if(!isPuzzleValid){
-                        throw new PuzzleInvalidException("Sudoku Puzzle is not valid");
-                    }
-
-                    List<List<Integer>> solvedPuzzle = new SudokuSolver(PUZZLE_SIZE, puzzle).solve();
-                }else {
-                    System.out.println("Puzzle size is not valid");
-                }
-            }
-        } catch (PuzzleInvalidException e) {
+           Cell[][] puzzle = new SudokuPuzzleReader().readFile(null);
+           new SudokuSolver(puzzle.length, puzzle).solve();
+        } catch (InvalidPuzzleException e) {
             e.printStackTrace();
         } catch (IllegalCharacterException e) {
             e.printStackTrace();

@@ -3,9 +3,9 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ValidCharacterGenerator {
+public class ValidCandidateGenerator {
 
-    public Set<Integer> generateValidSetOfCharacter(int size, BufferedReader reader) throws IOException {
+    public Set<Integer> generateValidCandidates(int size, BufferedReader reader) throws IOException {
 
         Set<Integer> validCharSet = new HashSet<>();
         String validCharLine = reader.readLine();

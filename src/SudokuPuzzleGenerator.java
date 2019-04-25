@@ -1,14 +1,33 @@
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class SudokuPuzzleGenerator {
 
-    public Cell[][] generatePuzzle(int size, BufferedReader reader, Set<Integer> validCharacters)
-            throws IllegalCharacterException, IOException {
+    public Cell[][] generatePuzzle(String filePath)
+            throws IllegalCharacterException, IOException, InvalidPuzzleException {
 
+        File file = new File("C:\\Users\\Shobhit\\Desktop\\repos\\Sudoku-Solver\\src\\puzzles\\Puzzle-4x4-0001.txt");
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        final int PUZZLE_SIZE = Integer.valueOf(reader.readLine());
+        if(new PuzzleSizeValidator().isSizeIsValid(PUZZLE_SIZE)) {
+            throw new InvalidPuzzleException("Puzzle size " + PUZZLE_SIZE + " is not a valid size");
+        }
+
+        Set<Integer> validCharacters = new ValidCandidateGenerator().generateValidCandidates(PUZZLE_SIZE, reader);
+        Cell[][] puzzle = generatePuzzleUtil(PUZZLE_SIZE, reader, validCharacters);
+        boolean isPuzzleValid = new SudokuPuzzleValidator(validCharacters, puzzle, PUZZLE_SIZE).isValid();
+        if(!isPuzzleValid){
+            throw new InvalidPuzzleException("Sudoku Puzzle is not valid");
+        }
+
+        return puzzle;
+    }
+
+    private Cell[][] generatePuzzleUtil(int size, BufferedReader reader, Set<Integer> validCharacters) throws IOException, IllegalCharacterException {
         Cell[][] puzzle = new Cell[size][size];
         String line;
         int row = 0;

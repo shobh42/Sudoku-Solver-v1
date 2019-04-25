@@ -1,19 +1,18 @@
-import java.util.HashSet;
 import java.util.Set;
 
 public class Cell {
 
-    private Set<Integer> possibleValues;
+    private Set<Integer> possibleCandidate;
 
-    public Cell(Set <Integer> possibleValues){
-        this.possibleValues = possibleValues;
+    public Cell(Set <Integer> possibleCandidate){
+        this.possibleCandidate = possibleCandidate;
     }
 
     public int getSize(){
-        return possibleValues.size();
+        return possibleCandidate.size();
     }
 
     public Set<Integer> getCandidates(){
-        return possibleValues;
+        return possibleCandidate;
     }
 }

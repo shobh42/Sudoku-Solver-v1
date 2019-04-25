@@ -16,13 +16,13 @@ public class SudokuPuzzleValidator {
         this.validCandidates = validCandidates;
         this.sudokuPuzzle = sudokuPuzzle;
         this.size = size;
-        rows = new ArrayList<>(size);
-        cols = new ArrayList<>(size);
-        blocks = new ArrayList<>(size);
         initialize();
     }
 
     private void initialize() {
+        rows = new ArrayList<>(size);
+        cols = new ArrayList<>(size);
+        blocks = new ArrayList<>(size);
         for(int i = 0; i < size; i++){
             rows.add(new HashSet<>());
             cols.add(new HashSet<>());
