@@ -1,28 +1,54 @@
+import java.util.List;
+import java.util.Set;
+
 public class BlockEliminationStrategy implements SolvingStrategy {
 
     @Override
     public boolean solve(int size, Cell[][] puzzle) {
 
-        int sqrt = (int) Math.sqrt(size);
-        for(int currentRow = 0; currentRow < size; currentRow+=currentRow + sqrt){
+        int sqrtOfSize = (int)Math.sqrt(size);
 
-            for(int currentCol = 0; currentCol < size; currentCol+=sqrt){
+        for(int currentBlockRow = 0; currentBlockRow < size; currentBlockRow+=sqrtOfSize){
 
-                Cell currentCell = puzzle[currentRow][currentCol];
-                if(currentCell.getSize() == 1){
-                    int candidate = (int) currentCell.getCandidates().toArray()[0];
-                    for(int col = 0; col < size; col++){
+            for(int currentBlockCol = 0; currentBlockCol < size; currentBlockCol+=sqrtOfSize) {
 
-                        if(currentCol != col){
-                            puzzle[currentRow][col].getCandidates().remove(candidate);
+                for (int currentBlockRowToCompare = currentBlockRow;
+                     currentBlockRowToCompare < currentBlockRowToCompare + sqrtOfSize; currentBlockRowToCompare++) {
+
+                    for (int currentBlockColToCompare = currentBlockCol;
+                         currentBlockColToCompare < currentBlockColToCompare + sqrtOfSize; currentBlockColToCompare++) {
+
+
+                        Cell currentCell = puzzle[currentBlockRowToCompare][currentBlockColToCompare];
+                        if (currentCell.getSize() == 1) {
+                            removeValuesFromBlock(puzzle, currentBlockRow, currentBlockCol,
+                                    currentBlockRowToCompare, currentBlockColToCompare);
+                            return true;
                         }
                     }
-
-                    return true;
                 }
             }
         }
 
         return false;
+    }
+
+    private void removeValuesFromBlock(Cell[][] puzzle, int currentBlockRow, int currentBlockCol,
+                                       int currentBlockRowToCompare, int currentBlockColToCompare) {
+
+        int sqrtOfSize = (int) Math.sqrt(puzzle.length);
+        for (int row = currentBlockRow;
+             row < currentBlockRowToCompare + sqrtOfSize; row++) {
+
+            for (int col = currentBlockCol;
+                 col < currentBlockColToCompare + sqrtOfSize; col++) {
+
+                if(row != currentBlockRowToCompare && col != currentBlockColToCompare){
+                    int candidate = (int) puzzle[currentBlockRowToCompare][currentBlockColToCompare].getCandidates().toArray()[0];
+                    Cell cell = puzzle[row][col];
+                    cell.getCandidates().remove(candidate);
+                }
+            }
+        }
     }
 }

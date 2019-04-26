@@ -17,11 +17,13 @@ public class SudokuSolver {
     }
 
     private void initializeStrategy() {
-        solvingStrategies = Arrays.asList(new RowEliminationStrategy(), new ColumnEliminationStrategy());
+        solvingStrategies = Arrays.asList(new RowEliminationStrategy());
+        //new BlockEliminationStrategy()
     }
 
+
     public List<SolvedPuzzle> solve(String path) throws InvalidPuzzleException, IOException, IllegalCharacterException {
-        Cell[][] sudokuPuzzle = puzzleGenerator.generatePuzzle(path);
+        sudokuPuzzle = puzzleGenerator.generatePuzzle(path);
         int size = sudokuPuzzle.length;
         int strategyNumber = 0;
         while(strategyNumber < solvingStrategies.size()){
@@ -29,6 +31,7 @@ public class SudokuSolver {
                 strategyNumber++;
             }
 
+            printPuzzle();
             boolean isPuzzleSolved = isPuzzleSolved();
             if(isPuzzleSolved){
                 solvedPuzzle.add(new SolvedPuzzle(sudokuPuzzle));
@@ -47,14 +50,30 @@ public class SudokuSolver {
             for(int j = 0; j < sudokuPuzzle.length; j++){
 
                 Cell currentCell =sudokuPuzzle[i][j];
-                if(currentCell.getSize() != 1){
-                    return false;
-                }
+                System.out.print(currentCell.getCandidates() + " ");
+//                if(currentCell.getSize() != 1){
+//                    return false;
+//                }
 
             }
+
+            System.out.println();
         }
 
         return true;
+    }
+
+    private void printPuzzle(){
+        for (int i = 0; i < sudokuPuzzle.length; i++){
+
+            for(int j = 0; j < sudokuPuzzle.length; j++){
+                System.out.print(sudokuPuzzle[i][j].getCandidates()+ " ");
+            }
+
+            System.out.println();
+        }
+
+        System.out.println("-----------------------------------------");
     }
 
 }

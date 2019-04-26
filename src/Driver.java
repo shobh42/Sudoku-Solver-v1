@@ -9,8 +9,10 @@ public class Driver {
 
         System.out.println("Enter the path of the puzzle file");
         try {
-           Cell[][] puzzle = new SudokuPuzzleReader().readFile(null);
-           new SudokuSolver().solve(null);
+           List<SolvedPuzzle> solvedPuzzle = new SudokuSolver().solve(null);
+           for(SolvedPuzzle puzzle : solvedPuzzle){
+               printPuzzle(puzzle.getSolvedPuzzle());
+           }
         } catch (InvalidPuzzleException e) {
             e.printStackTrace();
         } catch (IllegalCharacterException e) {
@@ -20,11 +22,11 @@ public class Driver {
         }
     }
 
-    private static void printPuzzle(Cell[][] puzzle){
-        for (int i = 0; i < puzzle.length; i++){
+    private static void printPuzzle(List<List<Integer>> puzzle){
+        for (int i = 0; i < puzzle.size(); i++){
 
-            for(int j = 0; j < puzzle.length; j++){
-                System.out.print(puzzle[i][j].getSize() + " ");
+            for(int j = 0; j < puzzle.size(); j++){
+                System.out.print(puzzle.get(i).get(j) + " ");
             }
             System.out.println();
         }

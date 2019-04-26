@@ -9,16 +9,16 @@ public class SolvedPuzzle {
         this.puzzle = puzzle;
     }
 
-    public List<List<Character>> getSolvedPuzzle(){
+    public List<List<Integer>> getSolvedPuzzle(){
 
-        List<List<Character>> solvedPuzzle = new ArrayList<>();
+        List<List<Integer>> solvedPuzzle = new ArrayList<>();
         for(int i = 0; i < puzzle.length; i++){
 
-            List<Character> cols = new ArrayList<>();
+            List<Integer> cols = new ArrayList<>();
             for(int j = 0; j < puzzle.length; j++){
 
                 Cell currentCell = puzzle[i][j];
-                cols.add((Character) currentCell.getCandidates().toArray()[0]);
+                cols.add((int) currentCell.getCandidates().toArray()[0]);
             }
 
             solvedPuzzle.add(cols);
