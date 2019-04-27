@@ -1,5 +1,7 @@
 public class RowEliminationStrategy implements SolvingStrategy
 {
+    private int count = 0;
+
     @Override
     public boolean solve(int size, Cell[][] puzzle) {
 
@@ -13,7 +15,8 @@ public class RowEliminationStrategy implements SolvingStrategy
                     int candidate = (int) currentCell.getCandidates().toArray()[0];
                     for(int col = 0; col < size; col++){
 
-                        if(currentCol != col){
+                        if(currentCol != col && puzzle[currentRow][col].getCandidates().contains(candidate)){
+                            count++;
                             puzzle[currentRow][col].getCandidates().remove(candidate);
                             stateChanged = true;
                         }
@@ -23,5 +26,9 @@ public class RowEliminationStrategy implements SolvingStrategy
         }
 
         return stateChanged;
+    }
+
+    public int getCount(){
+        return count;
     }
 }

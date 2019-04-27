@@ -2,9 +2,9 @@ import java.util.Set;
 
 public class Cell {
 
-    private Set<Integer> possibleCandidate;
+    private Set<Character> possibleCandidate;
 
-    public Cell(Set <Integer> possibleCandidate){
+    public Cell(Set <Character> possibleCandidate){
         this.possibleCandidate = possibleCandidate;
     }
 
@@ -12,7 +12,7 @@ public class Cell {
         return possibleCandidate.size();
     }
 
-    public Set<Integer> getCandidates(){
+    public Set<Character> getCandidates(){
         return possibleCandidate;
     }
 }

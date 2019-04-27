@@ -8,11 +8,11 @@ public class SudokuPuzzleValidator {
     private List<Set<Integer>> rows;
     private List<Set<Integer>> cols;
     private List<Set<Integer>> blocks;
-    private Set<Integer> validCandidates;
+    private Set<Character> validCandidates;
     private Cell[][] sudokuPuzzle;
     private int size;
 
-    public SudokuPuzzleValidator(Set<Integer> validCandidates, Cell[][] sudokuPuzzle, int size){
+    public SudokuPuzzleValidator(Set<Character> validCandidates, Cell[][] sudokuPuzzle, int size){
         this.validCandidates = validCandidates;
         this.sudokuPuzzle = sudokuPuzzle;
         this.size = size;

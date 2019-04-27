@@ -3,6 +3,7 @@ public class ColumnEliminationStrategy implements SolvingStrategy {
     @Override
     public boolean solve(int size, Cell[][] puzzle) {
 
+        boolean stateChanged = false;
         for(int currentCol = 0; currentCol < size; currentCol++){
 
             for(int currentRow = 0; currentRow < size; currentRow++){
@@ -14,14 +15,13 @@ public class ColumnEliminationStrategy implements SolvingStrategy {
 
                         if(currentRow != row){
                             puzzle[currentCol][row].getCandidates().remove(candidate);
+                            stateChanged = true;
                         }
                     }
-
-                    return true;
                 }
             }
         }
 
-        return false;
+        return stateChanged;
     }
 }

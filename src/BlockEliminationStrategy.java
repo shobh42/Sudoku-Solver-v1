@@ -7,7 +7,7 @@ public class BlockEliminationStrategy implements SolvingStrategy {
     public boolean solve(int size, Cell[][] puzzle) {
 
         int sqrtOfSize = (int)Math.sqrt(size);
-
+        boolean stateChanged = false;
         for(int currentBlockRow = 0; currentBlockRow < size; currentBlockRow+=sqrtOfSize){
 
             for(int currentBlockCol = 0; currentBlockCol < size; currentBlockCol+=sqrtOfSize) {
@@ -23,14 +23,14 @@ public class BlockEliminationStrategy implements SolvingStrategy {
                         if (currentCell.getSize() == 1) {
                             removeValuesFromBlock(puzzle, currentBlockRow, currentBlockCol,
                                     currentBlockRowToCompare, currentBlockColToCompare);
-                            return true;
+                            stateChanged = true;
                         }
                     }
                 }
             }
         }
 
-        return false;
+        return stateChanged;
     }
 
     private void removeValuesFromBlock(Cell[][] puzzle, int currentBlockRow, int currentBlockCol,

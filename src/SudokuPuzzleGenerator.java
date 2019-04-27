@@ -17,7 +17,7 @@ public class SudokuPuzzleGenerator {
             throw new InvalidPuzzleException("Puzzle size " + PUZZLE_SIZE + " is not a valid size");
         }
 
-        Set<Integer> validCharacters = generateValidCandidates(PUZZLE_SIZE, reader);
+        Set<Character> validCharacters = generateValidCandidates(PUZZLE_SIZE, reader);
         Cell[][] puzzle = generatePuzzleUtil(PUZZLE_SIZE, reader, validCharacters);
         boolean isPuzzleValid = new SudokuPuzzleValidator(validCharacters, puzzle, PUZZLE_SIZE).isValid();
         if(!isPuzzleValid){
@@ -27,28 +27,28 @@ public class SudokuPuzzleGenerator {
         return puzzle;
     }
 
-    private Set<Integer> generateValidCandidates(int size, BufferedReader reader) throws IOException {
-        Set<Integer> validCharSet = new HashSet<>();
+    private Set<Character> generateValidCandidates(int size, BufferedReader reader) throws IOException {
+        Set<Character> validCharSet = new HashSet<>();
         String validCharLine = reader.readLine();
         String []values = validCharLine.split(" ");
         for(int i = 0; i < size; i++){
-            validCharSet.add(Integer.parseInt(values[i]));
+            validCharSet.add(values[i].charAt(0));
         }
 
         return validCharSet;
     }
 
-    private Cell[][] generatePuzzleUtil(int size, BufferedReader reader, Set<Integer> validCharacters) throws IOException, IllegalCharacterException {
+    private Cell[][] generatePuzzleUtil(int size, BufferedReader reader, Set<Character> validCharacters) throws IOException, IllegalCharacterException {
         Cell[][] puzzle = new Cell[size][size];
         String line;
         int row = 0;
         while ((line = reader.readLine()) != null){
             String []values = line.split(" ");
             for(int col = 0; col < size; col++){
-                Set<Integer> possibleValues = new HashSet<>();
+                Set<Character> possibleValues = new HashSet<>();
 
                 if(values[col].equals("-")){
-                    for(Integer value : validCharacters){
+                    for(Character value : validCharacters){
                         possibleValues.add(value);
                     }
                 }else{
@@ -56,7 +56,7 @@ public class SudokuPuzzleGenerator {
                         throw new IllegalCharacterException("Valid character list does not have "+ values[col]);
                     }
 
-                    possibleValues.add(Integer.parseInt(values[col]));
+                    possibleValues.add(values[col].charAt(0));
                 }
 
                 Cell cell = new Cell(possibleValues);
