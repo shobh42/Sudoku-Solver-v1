@@ -1,5 +1,10 @@
 import java.util.*;
 
+
+/**
+ * If any two cell in row, column or block has the same pair of values of size 2, then the rest of the corresponding row, column
+ * block does not supposed to have those value. This strategy eliminates those values from the rest of the cell
+ */
 public class NakedPairStrategy implements SolvingStrategy{
 
     @Override
@@ -26,7 +31,6 @@ public class NakedPairStrategy implements SolvingStrategy{
                     if (isCandidatePresentInCol) {
                         removeValuesFromColumn(row, col, puzzle, cell.getCandidates());
                     }
-
                 }
             }
         }
@@ -34,78 +38,56 @@ public class NakedPairStrategy implements SolvingStrategy{
         return stateChanged;
     }
 
-    private void removeValuesFromColumn(int r, int c, Cell[][] puzzle, Set<Integer> values) {
+    private void removeValuesFromColumn(int r, int c, Cell[][] puzzle, Set<Character> values) {
         int size = puzzle.length;
         for(int r1 = 0;r1<size;r1++){
-            Set<Integer> cellFromValuesToRemove = puzzle[r1][c].getCandidates();
+            Set<Character> cellFromValuesToRemove = puzzle[r1][c].getCandidates();
             if(r!=r1 && cellFromValuesToRemove.size()>2 ){
-
                 char value1 = (Character)values.toArray()[0];
                 char value2 = (Character)values.toArray()[1];
-                if(cellFromValuesToRemove.contains(value1) || cellFromValuesToRemove.contains(value2) ){
-                    //stateChanged = true;
-                    if(cellFromValuesToRemove.contains(value1)){
-                        cellFromValuesToRemove.remove(value1);
-                    }
-                    if(cellFromValuesToRemove.contains(value2)){
-                        cellFromValuesToRemove.remove(value2);
-                    }
-                }
+                cellFromValuesToRemove.remove(value1);
+                cellFromValuesToRemove.remove(value2);
             }
         }
     }
 
-    private void removeValuesFromRow(int r, int c, Cell[][] puzzle, Set<Integer> values) {
+    private void removeValuesFromRow(int r, int c, Cell[][] puzzle, Set<Character> values) {
         int size = puzzle.length;
         for(int c1 = 0;c1<size;c1++){
-            Set<Integer> cellFromValuesToRemove = puzzle[r][c1].getCandidates();
+            Set<Character> cellFromValuesToRemove = puzzle[r][c1].getCandidates();
             if(c!=c1 && cellFromValuesToRemove.size()>2 ){
                 char value1 = (Character)values.toArray()[0];
                 char value2 = (Character)values.toArray()[1];
-                if(cellFromValuesToRemove.contains(value1) || cellFromValuesToRemove.contains(value2) ){
-                    //stateChanged = true;
-                    if(cellFromValuesToRemove.contains(value1)){
-                        cellFromValuesToRemove.remove(value1);
-                    }
-                    if(cellFromValuesToRemove.contains(value2)){
-                        cellFromValuesToRemove.remove(value2);
-                    }
-                }
+                cellFromValuesToRemove.remove(value1);
+                cellFromValuesToRemove.remove(value2);
             }
         }
     }
 
-    private void removeValuesFromBlock(int r, int c, Cell[][] puzzle, Set<Integer> values) {
+    private void removeValuesFromBlock(int r, int c, Cell[][] puzzle, Set<Character> values) {
         int size = puzzle.length;
         int sqrtOfSize = (int) Math.sqrt(size);
         for(int r1 = (r/sqrtOfSize)*sqrtOfSize ; r1 < ((r/sqrtOfSize)*sqrtOfSize)+sqrtOfSize ; r1++){
 
             for(int c1 = (c/sqrtOfSize)*sqrtOfSize ; c1 < ((c/sqrtOfSize)*sqrtOfSize)+sqrtOfSize ; c1++){
-                Set<Integer> cellFromValuesToRemove = puzzle[r1][c1].getCandidates();
+                Set<Character> cellFromValuesToRemove = puzzle[r1][c1].getCandidates();
 
-                if(r1 != r && c1!=c && cellFromValuesToRemove.size()>=2 ){
+                if(r1 != r && c1!=c && cellFromValuesToRemove.size()>2 ){
                     char value1 = (Character)values.toArray()[0];
                     char value2 = (Character)values.toArray()[1];
-
-                    if(cellFromValuesToRemove.contains(value1) ^ cellFromValuesToRemove.contains(value2) ){
-                        //stateChanged = true;
-                        if(cellFromValuesToRemove.contains(value1)){
-                            cellFromValuesToRemove.remove(value1);
-                        }else{
-                            cellFromValuesToRemove.remove(value2);
-                        }
-                    }
+                    cellFromValuesToRemove.remove(value1);
+                    cellFromValuesToRemove.remove(value2);
                 }
             }
         }
     }
 
-    private boolean checkIfColumnHasPair(int r, int c, Cell[][] puzzle, Set<Integer> values) {
+    private boolean checkIfColumnHasPair(int r, int c, Cell[][] puzzle, Set<Character> values) {
         int size = puzzle.length;
         int countCellsWithSamePairs = 1;
 
         for(int r1 = 0; r1<size ; r1++){
-            Set <Integer> possibleValues = puzzle[r1][c].getCandidates();
+            Set <Character> possibleValues = puzzle[r1][c].getCandidates();
             if(r1!=r && puzzle[r1][c].getSize()==2){
                 if(values.toArray()[0]==possibleValues.toArray()[0] && values.toArray()[1]==possibleValues.toArray()[1]){
                     countCellsWithSamePairs++;
@@ -115,13 +97,13 @@ public class NakedPairStrategy implements SolvingStrategy{
         return (countCellsWithSamePairs == 2);
     }
 
-    private boolean checkIfRowHasPair(int r, int c, Cell[][] puzzle, Set<Integer> values) {
+    private boolean checkIfRowHasPair(int r, int c, Cell[][] puzzle, Set<Character> values) {
         int size = puzzle.length;
         int countCellsWithSamePairs = 1;
 
         for(int c1 = 0; c1<size ; c1++){
 
-            Set <Integer> possibleValues = puzzle[r][c1].getCandidates();
+            Set <Character> possibleValues = puzzle[r][c1].getCandidates();
             if(c1!=c && puzzle[r][c1].getSize()==2){
                 if(values.toArray()[0]==possibleValues.toArray()[0] && values.toArray()[1]==possibleValues.toArray()[1]){
                     countCellsWithSamePairs++;
@@ -132,16 +114,16 @@ public class NakedPairStrategy implements SolvingStrategy{
     }
 
 
-    private boolean checkIfBlockHasPair(int r , int c, Cell[][]puzzle, Set<Integer> values) {
+    private boolean checkIfBlockHasPair(int currentRowOfPair , int currentColumnOfPair, Cell[][]puzzle, Set<Character> values) {
         int size = puzzle.length;
         int sqrtOfSize = (int) Math.sqrt(size);
         int countCellsWithSamePairs = 1;
-        for(int r1 = (r/sqrtOfSize)*sqrtOfSize ; r1 < ((r/sqrtOfSize)*sqrtOfSize)+sqrtOfSize ; r1++){
+        for(int rowToCheck = (currentRowOfPair/sqrtOfSize)*sqrtOfSize ; rowToCheck < ((currentRowOfPair/sqrtOfSize)*sqrtOfSize)+sqrtOfSize ; rowToCheck++){
 
-            for(int c1 = (c/sqrtOfSize)*sqrtOfSize   ; c1 < ((c/sqrtOfSize)*sqrtOfSize)+sqrtOfSize ; c1++){
-                Set <Integer> possibleValues = puzzle[r1][c1].getCandidates();
+            for(int colToCheck = (currentColumnOfPair/sqrtOfSize)*sqrtOfSize   ; colToCheck < ((currentColumnOfPair/sqrtOfSize)*sqrtOfSize)+sqrtOfSize ; colToCheck++){
+                Set <Character> possibleValues = puzzle[rowToCheck][colToCheck].getCandidates();
 
-                if(r1 != r && c1!=c && possibleValues.size()==2 ){
+                if(rowToCheck != currentRowOfPair && colToCheck!=currentColumnOfPair && possibleValues.size()==2 ){
 
                     if(values.toArray()[0]==possibleValues.toArray()[0] && values.toArray()[1]==possibleValues.toArray()[1]){
                         countCellsWithSamePairs++;
