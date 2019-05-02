@@ -1,5 +1,10 @@
 import java.util.Set;
 
+/**
+ * Box/Line reduction occurs when a candidate only appears in a row or column, and those candidates are also all in the same box.
+ * When this happens, you know that the candidate MUST occur in that row or column because it can't appear anywhere else there,
+ * so it CAN'T occur elsewhere in that box.
+ */
 public class BoxReductionStrategy implements SolvingStrategy{
 
     private boolean stateChanged ;
@@ -14,15 +19,16 @@ public class BoxReductionStrategy implements SolvingStrategy{
                 if(puzzle[row][col].getSize() > 1){
                     Character []values = (Character[]) puzzle[row][col].getCandidates().toArray();
                     for(int i = 0; i < values.length; i++){
-                        boolean otherRowHasValue = checkOtherRowExcludingCurrentBlockHasCandidate(row, col, puzzle, values[i]);
-                        boolean otherColHasValue = checkOtherColumnExcludingCurrentBlockHasCandidate(row, col, puzzle, values[i]);
+                        boolean blockHasValue = checkCandidateIsPresentInBlock(row, col, puzzle, values[i]);
+                        boolean otherRowHasValue = checkCandidateIsPresentInOtherRowExcludingCurrentBlock(row, col, puzzle, values[i]);
+                        boolean otherColHasValue = checkCandidateIsPresentInOtherColumnExcludingCurrentBlock(row, col, puzzle, values[i]);
 
-                        if(!otherRowHasValue){
-                            removeTheValueFromTheBlockExcludingColumn(row, col, puzzle, values[i]);
-                        }
-
-                        if(!otherColHasValue){
-                            removeTheValueFromTheBlockExcludingRow(row, col, puzzle, values[i]);
+                        if(blockHasValue && (!otherRowHasValue || !otherColHasValue)){
+                            if(!otherRowHasValue){
+                                removeTheValueFromTheBlockExcludingCandidateColumn(row, col, puzzle, values[i]);
+                            }else{
+                                removeTheValueFromTheBlockExcludingCandidateRow(row, col, puzzle, values[i]);
+                            }
                         }
                     }
                 }
@@ -32,7 +38,28 @@ public class BoxReductionStrategy implements SolvingStrategy{
         return stateChanged;
     }
 
-    private void removeTheValueFromTheBlockExcludingRow(int candidateRow, int candidateColumn, Cell[][] puzzle, char candidateToRemove) {
+    private void removeTheValueFromTheBlockExcludingCandidateRow(int candidateRow, int candidateColumn, Cell[][] puzzle, char candidateToRemove) {
+
+        int size = puzzle.length;
+        int sqrtOfSize = (int) Math.sqrt(size);
+
+        for(int r1 = (candidateRow/sqrtOfSize)*sqrtOfSize; r1 < ((candidateRow/sqrtOfSize)*sqrtOfSize)+sqrtOfSize ; r1++){
+
+            for(int c1 = (candidateColumn/sqrtOfSize)*sqrtOfSize; c1 < ((candidateColumn/sqrtOfSize)*sqrtOfSize)+sqrtOfSize ; c1++){
+
+                if(r1 != candidateRow){
+                    Set <Character> possibleValues = puzzle[r1][c1].getCandidates();
+                    if(possibleValues.contains(candidateToRemove)){
+                        stateChanged = true;
+                        possibleValues.remove(candidateToRemove);
+                    }
+
+                }
+            }
+        }
+    }
+
+    private void removeTheValueFromTheBlockExcludingCandidateColumn(int candidateRow, int candidateColumn, Cell[][] puzzle, char candidateToRemove) {
         int size = puzzle.length;
         int sqrtOfSize = (int) Math.sqrt(size);
 
@@ -53,35 +80,14 @@ public class BoxReductionStrategy implements SolvingStrategy{
         }
     }
 
-    private void removeTheValueFromTheBlockExcludingColumn(int candidateRow, int candidateColumn, Cell[][] puzzle, char valueToRemove) {
+    private boolean checkCandidateIsPresentInOtherColumnExcludingCurrentBlock(int r, int c, Cell[][] puzzle, char valueToFind) {
         int size = puzzle.length;
         int sqrtOfSize = (int) Math.sqrt(size);
 
-        for(int r1 = (candidateRow/sqrtOfSize)*sqrtOfSize; r1 < ((candidateRow/sqrtOfSize)*sqrtOfSize)+sqrtOfSize ; r1++){
-
-            for(int c1 = (candidateColumn/sqrtOfSize)*sqrtOfSize; c1 < ((candidateColumn/sqrtOfSize)*sqrtOfSize)+sqrtOfSize ; c1++){
-
-                if(r1 != candidateRow){
-                    Set <Character> possibleValues = puzzle[r1][c1].getCandidates();
-
-                    if(possibleValues.contains(valueToRemove)){
-                        stateChanged = true;
-                        possibleValues.remove(valueToRemove);
-                    }
-
-                }
-            }
-        }
-    }
-
-    private boolean checkOtherRowExcludingCurrentBlockHasCandidate(int candidateRow, int candidateColumn, Cell[][] puzzle, char candidate) {
-        int size = puzzle.length;
-        int sqrtOfSize = (int) Math.sqrt(size);
-
-        for(int r1 = 0; r1<size;r1++ ){
-            if((candidateRow/sqrtOfSize)!=(r1/sqrtOfSize)) {
-                Set <Character> possibleValues = puzzle[r1][candidateColumn].getCandidates();
-                if(possibleValues.contains(candidate)){
+        for (int c1 = 0; c1 < size; c1++) {
+            if (c/sqrtOfSize != c1/sqrtOfSize) {
+                Set<Character> possibleValues = puzzle[r][c1].getCandidates();
+                if (possibleValues.contains(valueToFind)) {
                     return true;
                 }
             }
@@ -89,18 +95,37 @@ public class BoxReductionStrategy implements SolvingStrategy{
         return false;
     }
 
-    private boolean checkOtherColumnExcludingCurrentBlockHasCandidate(int candidateRow, int candidateColumn, Cell[][] puzzle, char candidate) {
+    private boolean checkCandidateIsPresentInOtherRowExcludingCurrentBlock(int r, int c, Cell[][] puzzle, char valueToFind) {
         int size = puzzle.length;
         int sqrtOfSize = (int) Math.sqrt(size);
-
-        for(int c1 = 0 ;c1 < size ; c1++ ){
-            if((candidateColumn/sqrtOfSize)!=(c1/sqrtOfSize)) {
-                Set <Character> possibleValues = puzzle[candidateRow][c1].getCandidates();
-                if(possibleValues.contains(candidate)){
+        for (int r1 = (r / sqrtOfSize) * sqrtOfSize; r1 < ((r / sqrtOfSize) * sqrtOfSize) + sqrtOfSize; r1++) {
+            if (r != r1) {
+                Set<Character> possibleValues = puzzle[r1][c].getCandidates();
+                if (possibleValues.contains(valueToFind)) {
                     return true;
                 }
             }
         }
+
+        return false;
+    }
+
+
+    private boolean checkCandidateIsPresentInBlock(int r, int c, Cell[][] puzzle, char valueToFind) {
+        int size = puzzle.length;
+        int sqrtOfSize = (int) Math.sqrt(size);
+        for (int r1 = (r / sqrtOfSize) * sqrtOfSize; r1 < ((r / sqrtOfSize) * sqrtOfSize) + sqrtOfSize; r1++) {
+
+            for (int c1 = (c / sqrtOfSize) * sqrtOfSize; c1 < ((c / sqrtOfSize) * sqrtOfSize) + sqrtOfSize; c1++) {
+                if (r1 != r) {
+                    Set<Character> possibleValues = puzzle[r1][c1].getCandidates();
+                    if (possibleValues.contains(valueToFind)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
         return false;
     }
 }
