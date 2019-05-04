@@ -33,11 +33,12 @@ public class PointingPairStrategy implements SolvingStrategy {
                             removeTheCandidateFromColumn(row, col, puzzle, valueToCheck);
                         }
 
+                        return true;
                     }
                 }
             }
         }
-        return stateChanged;
+        return false;
     }
 
     private void removeTheCandidateFromColumn(int r, int c, Cell[][] puzzle, char valueToRemove) {

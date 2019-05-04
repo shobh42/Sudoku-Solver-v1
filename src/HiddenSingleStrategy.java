@@ -22,8 +22,7 @@ public class HiddenSingleStrategy implements SolvingStrategy{
                         Set<Character> s = new HashSet<>();
                         s.add(valueFound);
                         puzzle[row][col] = new Cell(s);
-                        stateChanged = true;
-                        break;
+                        return true;
                     }
                 }
             }

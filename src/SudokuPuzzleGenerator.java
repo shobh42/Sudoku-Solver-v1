@@ -10,7 +10,7 @@ public class SudokuPuzzleGenerator {
     public Cell[][] generatePuzzle(String filePath)
             throws IllegalCharacterException, IOException, InvalidPuzzleException {
 
-        File file = new File("C:\\Users\\Shobhit\\Desktop\\repos\\Sudoku-Solver\\src\\puzzles\\Puzzle-4x4-0001.txt");
+        File file = new File("C:\\Users\\Shobhit\\Desktop\\repos\\Sudoku-Solver\\src\\puzzles\\Puzzle-4x4-0101.txt");
         BufferedReader reader = new BufferedReader(new FileReader(file));
         final int PUZZLE_SIZE = Integer.valueOf(reader.readLine());
         if(!new PuzzleSizeValidator().isSizeIsValid(PUZZLE_SIZE)) {
@@ -52,7 +52,7 @@ public class SudokuPuzzleGenerator {
                         possibleValues.add(value);
                     }
                 }else{
-                    if(!validCharacters.contains(Integer.parseInt(values[col]))){
+                    if(!validCharacters.contains(values[col].charAt(0))){
                         throw new IllegalCharacterException("Valid character list does not have "+ values[col]);
                     }
 

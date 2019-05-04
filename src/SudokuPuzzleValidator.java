@@ -5,9 +5,9 @@ import java.util.Set;
 
 public class SudokuPuzzleValidator {
 
-    private List<Set<Integer>> rows;
-    private List<Set<Integer>> cols;
-    private List<Set<Integer>> blocks;
+    private List<Set<Character>> rows;
+    private List<Set<Character>> cols;
+    private List<Set<Character>> blocks;
     private Set<Character> validCandidates;
     private Cell[][] sudokuPuzzle;
     private int size;
@@ -37,7 +37,7 @@ public class SudokuPuzzleValidator {
             for(int j = 0; j < size; j++){
 
                 if(sudokuPuzzle[i][j].getSize() == 1){
-                    int candidate = (int)sudokuPuzzle[i][j].getCandidates().toArray()[0];
+                    char candidate = (char) sudokuPuzzle[i][j].getCandidates().toArray()[0];
 
                     if(checkCandidatePresentInRow(i, candidate) || checkCandidatePresentInColumn(j, candidate)
                     || checkCandidatePresentInBlock(i, j, candidate) || checkCandidateIsValid(candidate)){
@@ -50,11 +50,11 @@ public class SudokuPuzzleValidator {
         return true;
     }
 
-    private boolean checkCandidateIsValid(int candidate) {
+    private boolean checkCandidateIsValid(char candidate) {
         return !validCandidates.contains(candidate);
     }
 
-    private boolean checkCandidatePresentInBlock(int i, int j, int candidate) {
+    private boolean checkCandidatePresentInBlock(int i, int j, char candidate) {
         int blockIndex = (i / (int)Math.sqrt(size)) * (int)Math.sqrt(size) + (j / (int)Math.sqrt(size));
         if(blocks.get(blockIndex).contains(candidate)){
             return true;
@@ -64,7 +64,7 @@ public class SudokuPuzzleValidator {
         return false;
     }
 
-    private boolean checkCandidatePresentInColumn(int j, int candidate) {
+    private boolean checkCandidatePresentInColumn(int j, char candidate) {
         if(cols.get(j).contains(candidate)){
             return false;
         }
@@ -73,7 +73,7 @@ public class SudokuPuzzleValidator {
         return false;
     }
 
-    private boolean checkCandidatePresentInRow(int i, int candidate) {
+    private boolean checkCandidatePresentInRow(int i, char candidate) {
         if(rows.get(i).contains(candidate)){
             return true;
         }

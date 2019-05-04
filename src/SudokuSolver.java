@@ -17,8 +17,9 @@ public class SudokuSolver {
     }
 
     private void initializeStrategy() {
-        solvingStrategies = Arrays.asList(new RowEliminationStrategy());
-        //new BlockEliminationStrategy()
+        solvingStrategies = Arrays.asList(new RowEliminationStrategy(), new ColumnEliminationStrategy(),
+                new BlockEliminationStrategy(), new HiddenSingleStrategy(), new PointingPairStrategy(),
+                new BoxReductionStrategy());
     }
 
 
@@ -27,16 +28,18 @@ public class SudokuSolver {
         int size = sudokuPuzzle.length;
         int strategyNumber = 0;
         while(strategyNumber < solvingStrategies.size()){
-            if(!solvingStrategies.get(strategyNumber).solve(size, sudokuPuzzle)){
+            if(solvingStrategies.get(strategyNumber).solve(size, sudokuPuzzle)){
+                printPuzzle();
+                boolean isPuzzleSolved = isPuzzleSolved();
+                if(isPuzzleSolved){
+                    solvedPuzzle.add(new SolvedPuzzle(sudokuPuzzle));
+                    break;
+                }
                 strategyNumber++;
+                System.out.println("Looping");
             }
 
-            printPuzzle();
-            boolean isPuzzleSolved = isPuzzleSolved();
-            if(isPuzzleSolved){
-                solvedPuzzle.add(new SolvedPuzzle(sudokuPuzzle));
-                break;
-            }
+
         }
 
         return solvedPuzzle;
@@ -50,10 +53,10 @@ public class SudokuSolver {
             for(int j = 0; j < sudokuPuzzle.length; j++){
 
                 Cell currentCell =sudokuPuzzle[i][j];
-                System.out.print(currentCell.getCandidates() + " ");
-//                if(currentCell.getSize() != 1){
-//                    return false;
-//                }
+                //System.out.print(currentCell.getCandidates() + " ");
+                if(currentCell.getSize() != 1){
+                    return false;
+                }
 
             }
 

@@ -29,13 +29,15 @@ public class BoxReductionStrategy implements SolvingStrategy{
                             }else{
                                 removeTheValueFromTheBlockExcludingCandidateRow(row, col, puzzle, values[i]);
                             }
+
+                            return true;
                         }
                     }
                 }
             }
         }
 
-        return stateChanged;
+        return false;
     }
 
     private void removeTheValueFromTheBlockExcludingCandidateRow(int candidateRow, int candidateColumn, Cell[][] puzzle, char candidateToRemove) {

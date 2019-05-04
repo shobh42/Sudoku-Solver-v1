@@ -132,6 +132,7 @@ public class NakedPairStrategy implements SolvingStrategy{
                 }
             }
         }
+
         return (countCellsWithSamePairs == 2);
     }
 }

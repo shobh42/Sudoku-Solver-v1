@@ -7,7 +7,7 @@ public class Driver {
 
     public static void main(String[] args) {
 
-        System.out.println("Enter the path of the puzzle file");
+        //System.out.println("Enter the path of the puzzle file");
         try {
            List<SolvedPuzzle> solvedPuzzle = new SudokuSolver().solve(null);
            for(SolvedPuzzle puzzle : solvedPuzzle){
@@ -22,7 +22,7 @@ public class Driver {
         }
     }
 
-    private static void printPuzzle(List<List<Integer>> puzzle){
+    private static void printPuzzle(List<List<Character>> puzzle){
         for (int i = 0; i < puzzle.size(); i++){
 
             for(int j = 0; j < puzzle.size(); j++){
