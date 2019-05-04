@@ -11,13 +11,19 @@ public class BoxReductionStrategy implements SolvingStrategy{
 
     @Override
     public boolean solve(int size, Cell[][] puzzle) {
+        System.out.println("Inside Box Reduction Strategy");
         stateChanged = false;
         for(int row = 0; row < size; row++){
 
             for(int col = 0; col < size; col++){
 
                 if(puzzle[row][col].getSize() > 1){
-                    Character []values = (Character[]) puzzle[row][col].getCandidates().toArray();
+                    //Character []values = (Character[]) puzzle[row][col].getCandidates().toArray();
+                    Object[] cand = puzzle[row][col].getCandidates().toArray();
+                    Character[] values = new Character[cand.length];
+                    for(int temp = 0; temp < cand.length; temp++){
+                        values[temp] = (Character) cand[temp];
+                    }
                     for(int i = 0; i < values.length; i++){
                         boolean blockHasValue = checkCandidateIsPresentInBlock(row, col, puzzle, values[i]);
                         boolean otherRowHasValue = checkCandidateIsPresentInOtherRowExcludingCurrentBlock(row, col, puzzle, values[i]);

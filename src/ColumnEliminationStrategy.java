@@ -5,17 +5,19 @@ public class ColumnEliminationStrategy implements SolvingStrategy {
 
         System.out.println("In column strategy");
         boolean stateChanged = false;
-        for(int currentCol = 0; currentCol < size; currentCol++){
+        for(int candidateRow = 0; candidateRow < size; candidateRow++){
 
-            for(int currentRow = 0; currentRow < size; currentRow++){
+            for(int candidateColumn = 0; candidateColumn < size; candidateColumn++){
 
-                Cell currentCell = puzzle[currentRow][currentCol];
-                if(currentCell.getSize() == 1){
-                    char candidate = (char) currentCell.getCandidates().toArray()[0];
-                    for(int row = 0; row < size; row++){
+                Cell candidateCell = puzzle[candidateRow][candidateColumn];
+                if(candidateCell.getSize() == 1){
+                    char candidate = (char) candidateCell.getCandidates().toArray()[0];
+                    for(int otherCandidateCol = 0; otherCandidateCol < size; otherCandidateCol++){
 
-                        if(currentRow != row && puzzle[row][currentCol].getSize() != 1){
-                            puzzle[row][currentCol].getCandidates().remove(candidate);
+                        if(otherCandidateCol != candidateColumn && puzzle[candidateRow][otherCandidateCol].getSize() > 1
+                            && puzzle[candidateRow][otherCandidateCol].getCandidates().contains(candidate)){
+
+                            puzzle[candidateRow][otherCandidateCol].getCandidates().remove(candidate);
                             stateChanged = true;
                         }
                     }

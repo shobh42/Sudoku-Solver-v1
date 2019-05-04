@@ -27,19 +27,17 @@ public class SudokuSolver {
         sudokuPuzzle = puzzleGenerator.generatePuzzle(path);
         int size = sudokuPuzzle.length;
         int strategyNumber = 0;
-        while(strategyNumber < solvingStrategies.size()){
+        boolean puzzleIsSolved = false;
+
+        while(!puzzleIsSolved){
             if(solvingStrategies.get(strategyNumber).solve(size, sudokuPuzzle)){
-                printPuzzle();
-                boolean isPuzzleSolved = isPuzzleSolved();
-                if(isPuzzleSolved){
-                    solvedPuzzle.add(new SolvedPuzzle(sudokuPuzzle));
-                    break;
-                }
+                strategyNumber = 0;
+            }else{
                 strategyNumber++;
-                System.out.println("Looping");
             }
 
-
+            printPuzzle();
+            puzzleIsSolved = isPuzzleSolved();
         }
 
         return solvedPuzzle;
@@ -60,7 +58,7 @@ public class SudokuSolver {
 
             }
 
-            System.out.println();
+            //System.out.println();
         }
 
         return true;

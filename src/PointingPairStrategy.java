@@ -14,6 +14,7 @@ public class PointingPairStrategy implements SolvingStrategy {
 
     @Override
     public boolean solve(int size, Cell[][] puzzle) {
+        System.out.println("Inside Pointing Pair Strategy");
         for (int row = 0; row < size; row++) {
 
             for (int col = 0; col < size; col++) {

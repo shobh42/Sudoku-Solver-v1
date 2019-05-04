@@ -8,21 +8,27 @@ public class HiddenSingleStrategy implements SolvingStrategy{
     @Override
     public boolean solve(int size, Cell[][] puzzle) {
         boolean stateChanged = false;
-        for(int row = 0; row < size; row++){
+        System.out.println("Inside Hidden Single Strategy");
+        for(int candidateRow = 0; candidateRow < size; candidateRow++){
 
-            for(int col = 0; col < size; col++){
+            for(int candidateColumn = 0; candidateColumn < size; candidateColumn++){
 
-                Character[] candidates = (Character[])puzzle[row][col].getCandidates().toArray();
+                Object[] cand = puzzle[candidateRow][candidateColumn].getCandidates().toArray();
+                Character[] candidates = new Character[cand.length];
+                for(int temp = 0; temp < cand.length; temp++){
+                    candidates[temp] = (Character) cand[temp];
+                }
+
                 for (int index = 0; index < candidates.length; index++) {
 
-                    char valueToCheck = candidates[index];
-                    if (checkRowHasHiddenValue(row, col, puzzle, valueToCheck) ||
-                            checkColumnHasHiddenValue(row, col, puzzle, valueToCheck)) {
-                        char valueFound = valueToCheck;
+                    char candidate = candidates[index];
+                    if (checkRowHasHiddenValue(candidateRow, candidateColumn, puzzle, candidate) ||
+                            checkColumnHasHiddenValue(candidateRow, candidateColumn, puzzle, candidate)) {
+                        char valueFound = candidate;
                         Set<Character> s = new HashSet<>();
                         s.add(valueFound);
-                        puzzle[row][col] = new Cell(s);
-                        return true;
+                        puzzle[candidateRow][candidateColumn] = new Cell(s);
+                        stateChanged = true;
                     }
                 }
             }
@@ -31,27 +37,27 @@ public class HiddenSingleStrategy implements SolvingStrategy{
         return stateChanged;
     }
 
-    private boolean checkRowHasHiddenValue(int rowToCheck,int colToCheck,Cell [][]puzzle,char valueToCheck){
-
+    private boolean checkRowHasHiddenValue(int candidateRow, int candidateColumn, Cell [][]puzzle, char candidate){
         int size = puzzle.length;
-        for(int col = 0 ; col<size ; col++){
-            if(col!=colToCheck){
-
-                Set<Character> setOfValues =  puzzle[rowToCheck][col].getCandidates();
-                if(setOfValues.contains(valueToCheck)){
+        for(int otherCandidateRow = 0; otherCandidateRow < size; otherCandidateRow++){
+            if(otherCandidateRow != candidateRow){
+                Set < Character> setOfValues =  puzzle[otherCandidateRow][candidateColumn].getCandidates();
+                if(setOfValues.contains(candidate)){
                     return false;
                 }
             }
         }
+
         return true;
     }
 
-    private boolean checkColumnHasHiddenValue(int rowToCheck,int colToCheck,Cell [][]puzzle,char valueToCheck){
+    private boolean checkColumnHasHiddenValue(int candidateRow, int candidateColumn, Cell [][]puzzle, char candidate){
         int size = puzzle.length;
-        for(int row = 0 ; row<size ; row++){
-            if(row!=rowToCheck){
-                Set < Character> setOfValues =  puzzle[row][colToCheck].getCandidates();
-                if(setOfValues.contains(valueToCheck)){
+        for(int col = 0 ; col<size ; col++){
+            if(col!=candidateColumn){
+
+                Set<Character> setOfValues =  puzzle[candidateRow][col].getCandidates();
+                if(setOfValues.contains(candidate)){
                     return false;
                 }
             }
