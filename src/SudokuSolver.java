@@ -8,11 +8,13 @@ public class SudokuSolver {
     private Cell[][] sudokuPuzzle;
     private List<SolvingStrategy> solvingStrategies;
     private SudokuPuzzleGenerator puzzleGenerator;
-    List<SolvedPuzzle> solvedPuzzle;
+    private List<SolvedPuzzle> solvedPuzzle;
+    private Enum state;
 
     public SudokuSolver(){
         this.puzzleGenerator = new SudokuPuzzleGenerator();
         solvedPuzzle = new ArrayList<>();
+        state = SudokuState.UNSOLVED;
         initializeStrategy();
     }
 
@@ -25,11 +27,25 @@ public class SudokuSolver {
 
     public List<SolvedPuzzle> solve(String path) throws InvalidPuzzleException, IOException, IllegalCharacterException {
         sudokuPuzzle = puzzleGenerator.generatePuzzle(path);
+        while(state == SudokuState.UNSOLVED){
+            if(!solvePuzzleUsingStrategy()){
+                solvePuzzleUsingBruteForce();
+            }
+        }
+
+        return solvedPuzzle;
+    }
+
+    private void solvePuzzleUsingBruteForce() {
+        BruteForceSolver solver = new BruteForceSolver(sudokuPuzzle);
+        solver.solve();
+    }
+
+    private boolean solvePuzzleUsingStrategy(){
         int size = sudokuPuzzle.length;
         int strategyNumber = 0;
         boolean puzzleIsSolved = false;
-
-        while(!puzzleIsSolved){
+        while(!puzzleIsSolved && strategyNumber < solvingStrategies.size()){
             if(solvingStrategies.get(strategyNumber).solve(size, sudokuPuzzle)){
                 strategyNumber = 0;
             }else{
@@ -38,10 +54,14 @@ public class SudokuSolver {
 
             printPuzzle();
             puzzleIsSolved = isPuzzleSolved();
+            if(puzzleIsSolved){
+                state =SudokuState.SOLVED;
+                puzzleIsSolved = true;
+                break;
+            }
         }
 
-        return solvedPuzzle;
-
+        return puzzleIsSolved;
     }
 
     private boolean isPuzzleSolved() {

@@ -19,27 +19,29 @@ public class PointingPairStrategy implements SolvingStrategy {
 
             for (int col = 0; col < size; col++) {
 
-                Set<Character> values = puzzle[row][col].getCandidates();
-                for (int i = 0; i < values.size(); i++) {
-                    char valueToCheck = (Character) values.toArray()[i];
-                    boolean blockHasValue = checkCandidateIsPresentInBlock(row, col, puzzle, valueToCheck);
-                    boolean rowHasValue = checkCandidateIsPresentInOtherRowExcludingCurrentBlock(row, col, puzzle, valueToCheck);
-                    boolean colHasValue = checkCandidateIsPresentInOtherColumnExcludingCurrentBlock(row, col, puzzle, valueToCheck);
+                if(puzzle[row][col].getCandidates().size() > 1){
+                    Set<Character> values = puzzle[row][col].getCandidates();
+                    for (int i = 0; i < values.size(); i++) {
+                        char valueToCheck = (Character) values.toArray()[i];
+                        boolean blockHasValue = checkCandidateIsPresentInBlock(row, col, puzzle, valueToCheck);
+                        boolean rowHasValue = checkCandidateIsPresentInOtherRowExcludingCurrentBlock(row, col, puzzle, valueToCheck);
+                        boolean colHasValue = checkCandidateIsPresentInOtherColumnExcludingCurrentBlock(row, col, puzzle, valueToCheck);
 
-                    if(!blockHasValue && (rowHasValue ^ colHasValue)) {
+                        if(!blockHasValue && (rowHasValue || colHasValue)) {
 
-                        if (rowHasValue) {
-                            removeTheCandidateFromRow(row, col, puzzle, valueToCheck);
-                        } else {
-                            removeTheCandidateFromColumn(row, col, puzzle, valueToCheck);
+                            if (rowHasValue) {
+                                removeTheCandidateFromRow(row, col, puzzle, valueToCheck);
+                            } else {
+                                removeTheCandidateFromColumn(row, col, puzzle, valueToCheck);
+                            }
+
+                            stateChanged = true;
                         }
-
-                        return true;
                     }
                 }
             }
         }
-        return false;
+        return stateChanged;
     }
 
     private void removeTheCandidateFromColumn(int r, int c, Cell[][] puzzle, char valueToRemove) {

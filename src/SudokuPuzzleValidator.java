@@ -39,8 +39,11 @@ public class SudokuPuzzleValidator {
                 if(sudokuPuzzle[i][j].getSize() == 1){
                     char candidate = (char) sudokuPuzzle[i][j].getCandidates().toArray()[0];
 
-                    if(checkCandidatePresentInRow(i, candidate) || checkCandidatePresentInColumn(j, candidate)
-                    || checkCandidatePresentInBlock(i, j, candidate) || checkCandidateIsValid(candidate)){
+                    boolean res1 = checkCandidatePresentInRow(i, candidate);
+                    boolean res2 = checkCandidatePresentInColumn(j, candidate);
+                    boolean res3 = checkCandidatePresentInBlock(i, j, candidate);
+                    boolean res4 = checkCandidateIsValid(candidate);
+                    if(res1 || res2  || res3 || res4){
                         return false;
                     }
                 }
@@ -66,7 +69,7 @@ public class SudokuPuzzleValidator {
 
     private boolean checkCandidatePresentInColumn(int j, char candidate) {
         if(cols.get(j).contains(candidate)){
-            return false;
+            return true;
         }
 
         cols.get(j).add(candidate);

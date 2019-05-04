@@ -13,21 +13,23 @@ public class HiddenSingleStrategy implements SolvingStrategy{
 
             for(int candidateColumn = 0; candidateColumn < size; candidateColumn++){
 
-                Object[] cand = puzzle[candidateRow][candidateColumn].getCandidates().toArray();
-                Character[] candidates = new Character[cand.length];
-                for(int temp = 0; temp < cand.length; temp++){
-                    candidates[temp] = (Character) cand[temp];
-                }
+                if(puzzle[candidateRow][candidateColumn].getCandidates().size() > 1) {
+                    Object[] cand = puzzle[candidateRow][candidateColumn].getCandidates().toArray();
+                    Character[] candidates = new Character[cand.length];
+                    for (int temp = 0; temp < cand.length; temp++) {
+                        candidates[temp] = (Character) cand[temp];
+                    }
 
-                for (int index = 0; index < candidates.length; index++) {
+                    for (int index = 0; index < candidates.length; index++) {
 
-                    char candidate = candidates[index];
-                    if (checkCandidateIsNotPresentInRow(candidateRow, candidateColumn, puzzle, candidate) ||
-                            checkCandidateIsNotPresentInColumn(candidateRow, candidateColumn, puzzle, candidate)) {
-                        Set<Character> s = new HashSet<>();
-                        s.add(candidate);
-                        puzzle[candidateRow][candidateColumn] = new Cell(s);
-                        stateChanged = true;
+                        char candidate = candidates[index];
+                        if (checkCandidateIsNotPresentInRow(candidateRow, candidateColumn, puzzle, candidate) ||
+                                checkCandidateIsNotPresentInColumn(candidateRow, candidateColumn, puzzle, candidate)) {
+                            Set<Character> s = new HashSet<>();
+                            s.add(candidate);
+                            puzzle[candidateRow][candidateColumn] = new Cell(s);
+                            stateChanged = true;
+                        }
                     }
                 }
             }
