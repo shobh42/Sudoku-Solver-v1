@@ -10,9 +10,7 @@ public class BlockEliminationStrategy implements SolvingStrategy {
 
             for(int candidateColumn = 0; candidateColumn < size; candidateColumn+=sqrtOfSize) {
 
-                Cell candidateCell = puzzle[candidateRow][candidateColumn];
-                if(candidateCell.getSize() == 1){
-                    for (int otherCandidateRow = candidateRow;
+                for (int otherCandidateRow = candidateRow;
                          otherCandidateRow < (candidateRow + sqrtOfSize) && otherCandidateRow < size;
                          otherCandidateRow++) {
 
@@ -29,7 +27,7 @@ public class BlockEliminationStrategy implements SolvingStrategy {
                     }
                 }
             }
-        }
+
 
         return stateChanged;
     }

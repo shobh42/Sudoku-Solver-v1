@@ -22,11 +22,10 @@ public class HiddenSingleStrategy implements SolvingStrategy{
                 for (int index = 0; index < candidates.length; index++) {
 
                     char candidate = candidates[index];
-                    if (checkRowHasHiddenValue(candidateRow, candidateColumn, puzzle, candidate) ||
-                            checkColumnHasHiddenValue(candidateRow, candidateColumn, puzzle, candidate)) {
-                        char valueFound = candidate;
+                    if (checkCandidateIsNotPresentInRow(candidateRow, candidateColumn, puzzle, candidate) ||
+                            checkCandidateIsNotPresentInColumn(candidateRow, candidateColumn, puzzle, candidate)) {
                         Set<Character> s = new HashSet<>();
-                        s.add(valueFound);
+                        s.add(candidate);
                         puzzle[candidateRow][candidateColumn] = new Cell(s);
                         stateChanged = true;
                     }
@@ -37,12 +36,12 @@ public class HiddenSingleStrategy implements SolvingStrategy{
         return stateChanged;
     }
 
-    private boolean checkRowHasHiddenValue(int candidateRow, int candidateColumn, Cell [][]puzzle, char candidate){
+    private boolean checkCandidateIsNotPresentInRow(int candidateRow, int candidateColumn, Cell [][]puzzle, char candidate){
         int size = puzzle.length;
         for(int otherCandidateRow = 0; otherCandidateRow < size; otherCandidateRow++){
             if(otherCandidateRow != candidateRow){
-                Set < Character> setOfValues =  puzzle[otherCandidateRow][candidateColumn].getCandidates();
-                if(setOfValues.contains(candidate)){
+                Set<Character> candidates =  puzzle[otherCandidateRow][candidateColumn].getCandidates();
+                if(candidates.contains(candidate)){
                     return false;
                 }
             }
@@ -51,17 +50,17 @@ public class HiddenSingleStrategy implements SolvingStrategy{
         return true;
     }
 
-    private boolean checkColumnHasHiddenValue(int candidateRow, int candidateColumn, Cell [][]puzzle, char candidate){
+    private boolean checkCandidateIsNotPresentInColumn(int candidateRow, int candidateColumn, Cell [][]puzzle, char candidate){
         int size = puzzle.length;
-        for(int col = 0 ; col<size ; col++){
-            if(col!=candidateColumn){
-
-                Set<Character> setOfValues =  puzzle[candidateRow][col].getCandidates();
-                if(setOfValues.contains(candidate)){
+        for(int otherCandidateColumn = 0; otherCandidateColumn<size; otherCandidateColumn++){
+            if(otherCandidateColumn != candidateColumn){
+                Set<Character> candidates =  puzzle[candidateRow][otherCandidateColumn].getCandidates();
+                if(candidates.contains(candidate)){
                     return false;
                 }
             }
         }
+
         return true;
     }
 }
