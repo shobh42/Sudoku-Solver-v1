@@ -20,7 +20,7 @@ public class BlockEliminationStrategy implements SolvingStrategy {
 
                             Cell otherCandidateCell = puzzle[otherCandidateRow][otherCandidateColumn];
                             if (otherCandidateCell.getSize() == 1) {
-                                stateChanged = removeCandidateFromBlock(puzzle, candidateRow, candidateColumn,
+                                stateChanged = stateChanged || removeCandidateFromBlock(puzzle, candidateRow, candidateColumn,
                                         otherCandidateRow, otherCandidateColumn);
                             }
                         }

@@ -20,9 +20,9 @@ public class PointingPairStrategy implements SolvingStrategy {
             for (int col = 0; col < size; col++) {
 
                 if(puzzle[row][col].getCandidates().size() > 1){
-                    Set<Character> values = puzzle[row][col].getCandidates();
-                    for (int i = 0; i < values.size(); i++) {
-                        char valueToCheck = (Character) values.toArray()[i];
+                    Set<Character> candidates = puzzle[row][col].getCandidates();
+                    for (int i = 0; i < candidates.size() && candidates.size() != 1; i++) {
+                        char valueToCheck = (Character) candidates.toArray()[i];
                         boolean blockHasValue = checkCandidateIsPresentInBlock(row, col, puzzle, valueToCheck);
                         boolean rowHasValue = checkCandidateIsPresentInOtherRowExcludingCurrentBlock(row, col, puzzle, valueToCheck);
                         boolean colHasValue = checkCandidateIsPresentInOtherColumnExcludingCurrentBlock(row, col, puzzle, valueToCheck);
@@ -97,8 +97,9 @@ public class PointingPairStrategy implements SolvingStrategy {
     private boolean checkCandidateIsPresentInOtherRowExcludingCurrentBlock(int r, int c, Cell[][] puzzle, char valueToFind) {
         int size = puzzle.length;
         int sqrtOfSize = (int) Math.sqrt(size);
-        for (int r1 = (r / sqrtOfSize) * sqrtOfSize; r1 < ((r / sqrtOfSize) * sqrtOfSize) + sqrtOfSize; r1++) {
-            if (r != r1) {
+        //for (int r1 = (r / sqrtOfSize) * sqrtOfSize; r1 < ((r / sqrtOfSize) * sqrtOfSize) + sqrtOfSize; r1++) {
+        for (int r1 = 0; r1 < size; r1++){
+            if (r1/sqrtOfSize != r/sqrtOfSize) {
                 Set<Character> possibleValues = puzzle[r1][c].getCandidates();
                 if (possibleValues.contains(valueToFind)) {
                     return true;

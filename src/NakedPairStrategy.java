@@ -9,6 +9,7 @@ public class NakedPairStrategy implements SolvingStrategy{
 
     @Override
     public boolean solve(int size, Cell[][] puzzle) {
+        System.out.println("Inside Naked Pair Strategy");
         boolean stateChanged = false;
 
         for(int row = 0; row < size; row++){
@@ -23,14 +24,17 @@ public class NakedPairStrategy implements SolvingStrategy{
                     boolean isCandidatePresentInCol = checkIfColumnHasPair(row, col, puzzle, cell.getCandidates());
 
                     if (isCandidatePresentInBlock) {
-                        removeValuesFromBlock(row, col, puzzle, cell.getCandidates());
+                        stateChanged = stateChanged || removeValuesFromBlock(row, col, puzzle, cell.getCandidates());
                     }
                     if (isCandidatePresentInRow) {
-                        removeValuesFromRow(row, col, puzzle, cell.getCandidates());
+                        stateChanged = stateChanged || removeValuesFromRow(row, col, puzzle, cell.getCandidates());
                     }
                     if (isCandidatePresentInCol) {
-                        removeValuesFromColumn(row, col, puzzle, cell.getCandidates());
+                        stateChanged = stateChanged || removeValuesFromColumn(row, col, puzzle, cell.getCandidates());
                     }
+
+                    //System.out.println("Printing Puzzle in Naked Pair");
+                    //printPuzzle(puzzle);
                 }
             }
         }
@@ -38,33 +42,54 @@ public class NakedPairStrategy implements SolvingStrategy{
         return stateChanged;
     }
 
-    private void removeValuesFromColumn(int r, int c, Cell[][] puzzle, Set<Character> values) {
+    private boolean removeValuesFromColumn(int r, int c, Cell[][] puzzle, Set<Character> values) {
+        boolean stateChanged = false;
         int size = puzzle.length;
         for(int r1 = 0;r1<size;r1++){
             Set<Character> cellFromValuesToRemove = puzzle[r1][c].getCandidates();
             if(r!=r1 && cellFromValuesToRemove.size()>2 ){
                 char value1 = (Character)values.toArray()[0];
                 char value2 = (Character)values.toArray()[1];
-                cellFromValuesToRemove.remove(value1);
-                cellFromValuesToRemove.remove(value2);
+                if(cellFromValuesToRemove.contains(value1)){
+                    cellFromValuesToRemove.remove(value1);
+                    stateChanged = true;
+                }
+
+                if(cellFromValuesToRemove.contains(value2)){
+                    cellFromValuesToRemove.remove(value2);
+                    stateChanged = true;
+                }
             }
         }
+
+        return stateChanged;
     }
 
-    private void removeValuesFromRow(int r, int c, Cell[][] puzzle, Set<Character> values) {
+    private boolean removeValuesFromRow(int r, int c, Cell[][] puzzle, Set<Character> values) {
+        boolean stateChanged = false;
         int size = puzzle.length;
         for(int c1 = 0;c1<size;c1++){
             Set<Character> cellFromValuesToRemove = puzzle[r][c1].getCandidates();
             if(c!=c1 && cellFromValuesToRemove.size()>2 ){
                 char value1 = (Character)values.toArray()[0];
                 char value2 = (Character)values.toArray()[1];
-                cellFromValuesToRemove.remove(value1);
-                cellFromValuesToRemove.remove(value2);
+                if(cellFromValuesToRemove.contains(value1)){
+                    cellFromValuesToRemove.remove(value1);
+                    stateChanged = true;
+                }
+
+                if(cellFromValuesToRemove.contains(value2)){
+                    cellFromValuesToRemove.remove(value2);
+                    stateChanged = true;
+                }
             }
         }
+
+        return stateChanged;
     }
 
-    private void removeValuesFromBlock(int r, int c, Cell[][] puzzle, Set<Character> values) {
+    private boolean removeValuesFromBlock(int r, int c, Cell[][] puzzle, Set<Character> values) {
+        boolean stateChanged = false;
         int size = puzzle.length;
         int sqrtOfSize = (int) Math.sqrt(size);
         for(int r1 = (r/sqrtOfSize)*sqrtOfSize ; r1 < ((r/sqrtOfSize)*sqrtOfSize)+sqrtOfSize ; r1++){
@@ -75,11 +100,20 @@ public class NakedPairStrategy implements SolvingStrategy{
                 if(r1 != r && c1!=c && cellFromValuesToRemove.size()>2 ){
                     char value1 = (Character)values.toArray()[0];
                     char value2 = (Character)values.toArray()[1];
-                    cellFromValuesToRemove.remove(value1);
-                    cellFromValuesToRemove.remove(value2);
+                    if(cellFromValuesToRemove.contains(value1)){
+                        cellFromValuesToRemove.remove(value1);
+                        stateChanged = true;
+                    }
+
+                    if(cellFromValuesToRemove.contains(value2)){
+                        cellFromValuesToRemove.remove(value2);
+                        stateChanged = true;
+                    }
                 }
             }
         }
+
+        return stateChanged;
     }
 
     private boolean checkIfColumnHasPair(int r, int c, Cell[][] puzzle, Set<Character> values) {
@@ -134,5 +168,18 @@ public class NakedPairStrategy implements SolvingStrategy{
         }
 
         return (countCellsWithSamePairs == 2);
+    }
+
+    private void printPuzzle(Cell [][] sudokuPuzzle){
+        for (int i = 0; i < sudokuPuzzle.length; i++){
+
+            for(int j = 0; j < sudokuPuzzle.length; j++){
+                System.out.print(sudokuPuzzle[i][j].getCandidates()+ " ");
+            }
+
+            System.out.println();
+        }
+
+        System.out.println("-----------------------------------------");
     }
 }

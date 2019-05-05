@@ -1,23 +1,25 @@
 public class ColumnEliminationStrategy implements SolvingStrategy {
+    private int count = 0;
 
     @Override
     public boolean solve(int size, Cell[][] puzzle) {
-
-        System.out.println("In column strategy");
+        System.out.println("In Column strategy");
         boolean stateChanged = false;
-        for(int candidateRow = 0; candidateRow < size; candidateRow++){
+        for(int candidateColumn = 0; candidateColumn < size; candidateColumn++){
 
-            for(int candidateColumn = 0; candidateColumn < size; candidateColumn++){
+            for(int candidateRow = 0; candidateRow < size; candidateRow++){
 
                 Cell candidateCell = puzzle[candidateRow][candidateColumn];
                 if(candidateCell.getSize() == 1){
                     char candidate = (char) candidateCell.getCandidates().toArray()[0];
-                    for(int otherCandidateCol = 0; otherCandidateCol < size; otherCandidateCol++){
+                    if(candidateColumn == 4 && candidate == '8'){
+                        int i = 0;
+                    }
+                    for(int otherCandidateRow = 0; otherCandidateRow < size; otherCandidateRow++) {
 
-                        if(otherCandidateCol != candidateColumn && puzzle[candidateRow][otherCandidateCol].getSize() > 1
-                            && puzzle[candidateRow][otherCandidateCol].getCandidates().contains(candidate)){
-
-                            puzzle[candidateRow][otherCandidateCol].getCandidates().remove(candidate);
+                        if (otherCandidateRow != candidateRow && puzzle[otherCandidateRow][candidateColumn].getSize() > 1 &&
+                                puzzle[otherCandidateRow][candidateColumn].getCandidates().contains(candidate)) {
+                            puzzle[otherCandidateRow][candidateColumn].getCandidates().remove(candidate);
                             stateChanged = true;
                         }
                     }
@@ -26,5 +28,9 @@ public class ColumnEliminationStrategy implements SolvingStrategy {
         }
 
         return stateChanged;
+    }
+
+    public int getCount(){
+        return count;
     }
 }

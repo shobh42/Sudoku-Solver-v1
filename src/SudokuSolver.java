@@ -19,9 +19,15 @@ public class SudokuSolver {
     }
 
     private void initializeStrategy() {
+        //new BoxReductionStrategy()
+        //new PointingPairStrategy(),
+        //, new HiddenSingleStrategy()
+        //new BlockEliminationStrategy());
+        //new ColumnEliminationStrategy()
+        //new RowEliminationStrategy()
         solvingStrategies = Arrays.asList(new RowEliminationStrategy(), new ColumnEliminationStrategy(),
-                new BlockEliminationStrategy(), new HiddenSingleStrategy(), new PointingPairStrategy(),
-                new BoxReductionStrategy());
+                new BlockEliminationStrategy(), new HiddenSingleStrategy(), new BoxReductionStrategy(), new NakedPairStrategy());
+
     }
 
 
@@ -39,6 +45,7 @@ public class SudokuSolver {
     private void solvePuzzleUsingBruteForce() {
         BruteForceSolver solver = new BruteForceSolver(sudokuPuzzle);
         solver.solve();
+        printPuzzle();
     }
 
     private boolean solvePuzzleUsingStrategy(){
@@ -96,5 +103,4 @@ public class SudokuSolver {
 
         System.out.println("-----------------------------------------");
     }
-
 }
