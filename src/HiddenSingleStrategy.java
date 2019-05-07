@@ -4,11 +4,20 @@ import java.util.*;
  * Created by Shobhit on 11/15/2016.
  */
 public class HiddenSingleStrategy implements SolvingStrategy{
+    private int count;
+    private double totalTime;
+
+    public HiddenSingleStrategy(){
+        count = 0;
+        totalTime = 0;
+    }
+
 
     @Override
     public boolean solve(int size, Cell[][] puzzle) {
         boolean stateChanged = false;
         System.out.println("Inside Hidden Single Strategy");
+        long startTime = System.currentTimeMillis();
         for(int candidateRow = 0; candidateRow < size; candidateRow++){
 
             for(int candidateColumn = 0; candidateColumn < size; candidateColumn++){
@@ -29,13 +38,23 @@ public class HiddenSingleStrategy implements SolvingStrategy{
                             s.add(candidate);
                             puzzle[candidateRow][candidateColumn] = new Cell(s);
                             stateChanged = true;
+                            count++;
                         }
                     }
                 }
             }
         }
-
+        long endTime = System.currentTimeMillis();
+        totalTime+= (endTime - startTime);
         return stateChanged;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public double getTotalTime() {
+        return totalTime;
     }
 
     private boolean checkCandidateIsNotPresentInRow(int candidateRow, int candidateColumn, Cell [][]puzzle, char candidate){
@@ -64,6 +83,10 @@ public class HiddenSingleStrategy implements SolvingStrategy{
         }
 
         return true;
+    }
+
+    public String toString(){
+        return "Hidden Single has eliminated " + count + " and has taken " + totalTime/1000;
     }
 }
 

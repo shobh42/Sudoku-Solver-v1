@@ -10,11 +10,28 @@ import java.util.Set;
  * you can eliminate that candidate from any other cells in the row or column that the candidate is aligned on.
  */
 public class PointingPairStrategy implements SolvingStrategy {
+
     private boolean stateChanged;
+    private int count;
+    private double totalTime;
+
+    public PointingPairStrategy(){
+        count = 0;
+        totalTime = 0;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public double getTotalTime() {
+        return totalTime;
+    }
 
     @Override
     public boolean solve(int size, Cell[][] puzzle) {
         System.out.println("Inside Pointing Pair Strategy");
+        long startTime = System.currentTimeMillis();
         for (int row = 0; row < size; row++) {
 
             for (int col = 0; col < size; col++) {
@@ -41,6 +58,9 @@ public class PointingPairStrategy implements SolvingStrategy {
                 }
             }
         }
+
+        long endTime = System.currentTimeMillis();
+        totalTime+= (endTime - startTime);
         return stateChanged;
     }
 
@@ -55,6 +75,7 @@ public class PointingPairStrategy implements SolvingStrategy {
                     if (possibleValues.contains(valueToRemove)) {
                         stateChanged = true;
                         possibleValues.remove(valueToRemove);
+                        count++;
                     }
                 }
             }
@@ -73,6 +94,7 @@ public class PointingPairStrategy implements SolvingStrategy {
                     if (possibleValues.contains(valueToRemove)) {
                         stateChanged = true;
                         possibleValues.remove(valueToRemove);
+                        count++;
                     }
                 }
             }
@@ -126,5 +148,9 @@ public class PointingPairStrategy implements SolvingStrategy {
         }
 
         return false;
+    }
+
+    public String toString(){
+        return "Pointing Pair has eliminated " + count + " and has taken " + totalTime/1000;
     }
 }

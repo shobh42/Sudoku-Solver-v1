@@ -13,6 +13,10 @@ public class Driver {
            for(SolvedPuzzle puzzle : solvedPuzzle){
                printPuzzle(puzzle.getSolvedPuzzle());
            }
+            for(SolvingStrategy strategy: solvedPuzzle.get(0).strategiesInfo()){
+                System.out.println(strategy.toString());
+                System.out.println();
+            }
         } catch (InvalidPuzzleException e) {
             e.printStackTrace();
         } catch (IllegalCharacterException e) {
@@ -30,5 +34,7 @@ public class Driver {
             }
             System.out.println();
         }
+
+
     }
 }

@@ -4,9 +4,11 @@ import java.util.List;
 public class SolvedPuzzle {
 
     private Cell[][] puzzle;
+    private List<SolvingStrategy> strategiesInfo;
 
-    public SolvedPuzzle(Cell[][] puzzle){
+    public SolvedPuzzle(Cell[][] puzzle, List<SolvingStrategy> strategiesInfo){
         this.puzzle = puzzle;
+        this.strategiesInfo = strategiesInfo;
     }
 
     public List<List<Character>> getSolvedPuzzle(){
@@ -25,5 +27,9 @@ public class SolvedPuzzle {
         }
 
         return solvedPuzzle;
+    }
+
+    public List<SolvingStrategy> strategiesInfo(){
+        return strategiesInfo;
     }
 }

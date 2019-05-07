@@ -7,12 +7,21 @@ import java.util.Set;
  */
 public class BoxReductionStrategy implements SolvingStrategy{
 
-    private boolean stateChanged ;
+    private int count;
+    private double totalTime;
+    boolean stateChanged;
+
+    public BoxReductionStrategy(){
+        count = 0;
+        totalTime = 0;
+    }
+
 
     @Override
     public boolean solve(int size, Cell[][] puzzle) {
         System.out.println("Inside Box Reduction Strategy");
         stateChanged = false;
+        long startTime = System.currentTimeMillis();
         for(int row = 0; row < size; row++){
 
             for(int col = 0; col < size; col++){
@@ -43,7 +52,17 @@ public class BoxReductionStrategy implements SolvingStrategy{
             }
         }
 
-        return false;
+        long endTime   = System.currentTimeMillis();
+        totalTime+= (endTime - startTime);
+        return stateChanged;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public double getTotalTime() {
+        return totalTime;
     }
 
     private void removeTheValueFromTheBlockExcludingCandidateRow(int candidateRow, int candidateColumn, Cell[][] puzzle, char candidateToRemove) {
@@ -60,6 +79,7 @@ public class BoxReductionStrategy implements SolvingStrategy{
                     if(possibleValues.contains(candidateToRemove)){
                         stateChanged = true;
                         possibleValues.remove(candidateToRemove);
+                        count++;
                     }
 
                 }
@@ -81,6 +101,7 @@ public class BoxReductionStrategy implements SolvingStrategy{
                     if(possibleValues.contains(candidateToRemove)){
                         stateChanged = true;
                         possibleValues.remove(candidateToRemove);
+                        count++;
                     }
 
                 }
@@ -135,5 +156,9 @@ public class BoxReductionStrategy implements SolvingStrategy{
         }
 
         return false;
+    }
+
+    public String toString(){
+        return "Box Reduction has eliminated " + count + " and has taken " + totalTime/1000;
     }
 }

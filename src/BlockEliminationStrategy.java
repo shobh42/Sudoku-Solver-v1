@@ -1,4 +1,23 @@
+import java.sql.Time;
+import java.util.concurrent.TimeUnit;
+
 public class BlockEliminationStrategy implements SolvingStrategy {
+
+    private int count;
+    private double totalTime;
+
+    public BlockEliminationStrategy(){
+        count = 0;
+        totalTime = 0;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public double getTotalTime() {
+        return totalTime;
+    }
 
     @Override
     public boolean solve(int size, Cell[][] puzzle) {
@@ -6,6 +25,7 @@ public class BlockEliminationStrategy implements SolvingStrategy {
         System.out.println("In block elimination");
         int sqrtOfSize = (int)Math.sqrt(size);
         boolean stateChanged = false;
+        long startTime = System.currentTimeMillis();
         for(int candidateRow = 0; candidateRow < size; candidateRow+=sqrtOfSize){
 
             for(int candidateColumn = 0; candidateColumn < size; candidateColumn+=sqrtOfSize) {
@@ -22,12 +42,16 @@ public class BlockEliminationStrategy implements SolvingStrategy {
                             if (otherCandidateCell.getSize() == 1) {
                                 stateChanged = stateChanged || removeCandidateFromBlock(puzzle, candidateRow, candidateColumn,
                                         otherCandidateRow, otherCandidateColumn);
+                                if(stateChanged){
+                                    count++;
+                                }
                             }
                         }
                     }
                 }
             }
-
+        long endTime   = System.currentTimeMillis();
+        totalTime+= (endTime - startTime);
 
         return stateChanged;
     }
@@ -58,5 +82,9 @@ public class BlockEliminationStrategy implements SolvingStrategy {
         }
 
         return stateChanged;
+    }
+
+    public String toString(){
+        return "Block Elimination has eliminated " + count + " and has taken " + totalTime/1000;
     }
 }

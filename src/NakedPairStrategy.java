@@ -7,11 +7,19 @@ import java.util.*;
  */
 public class NakedPairStrategy implements SolvingStrategy{
 
+    private int count;
+    private double totalTime;
+
+    public NakedPairStrategy(){
+        count = 0;
+        totalTime = 0;
+    }
+
     @Override
     public boolean solve(int size, Cell[][] puzzle) {
         System.out.println("Inside Naked Pair Strategy");
         boolean stateChanged = false;
-
+        long startTime = System.currentTimeMillis();
         for(int row = 0; row < size; row++){
 
             for(int col = 0; col < size; col++){
@@ -33,13 +41,24 @@ public class NakedPairStrategy implements SolvingStrategy{
                         stateChanged = stateChanged || removeValuesFromColumn(row, col, puzzle, cell.getCandidates());
                     }
 
+
                     //System.out.println("Printing Puzzle in Naked Pair");
                     //printPuzzle(puzzle);
                 }
             }
         }
 
+        long endTime = System.currentTimeMillis();
+        totalTime+= (endTime - startTime);
         return stateChanged;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public double getTotalTime() {
+        return totalTime;
     }
 
     private boolean removeValuesFromColumn(int r, int c, Cell[][] puzzle, Set<Character> values) {
@@ -53,11 +72,13 @@ public class NakedPairStrategy implements SolvingStrategy{
                 if(cellFromValuesToRemove.contains(value1)){
                     cellFromValuesToRemove.remove(value1);
                     stateChanged = true;
+                    count++;
                 }
 
                 if(cellFromValuesToRemove.contains(value2)){
                     cellFromValuesToRemove.remove(value2);
                     stateChanged = true;
+                    count++;
                 }
             }
         }
@@ -75,12 +96,13 @@ public class NakedPairStrategy implements SolvingStrategy{
                 char value2 = (Character)values.toArray()[1];
                 if(cellFromValuesToRemove.contains(value1)){
                     cellFromValuesToRemove.remove(value1);
-                    stateChanged = true;
+                    stateChanged = true;count++;
                 }
 
                 if(cellFromValuesToRemove.contains(value2)){
                     cellFromValuesToRemove.remove(value2);
                     stateChanged = true;
+                    count++;
                 }
             }
         }
@@ -103,11 +125,13 @@ public class NakedPairStrategy implements SolvingStrategy{
                     if(cellFromValuesToRemove.contains(value1)){
                         cellFromValuesToRemove.remove(value1);
                         stateChanged = true;
+                        count++;
                     }
 
                     if(cellFromValuesToRemove.contains(value2)){
                         cellFromValuesToRemove.remove(value2);
                         stateChanged = true;
+                        count++;
                     }
                 }
             }
@@ -181,5 +205,9 @@ public class NakedPairStrategy implements SolvingStrategy{
         }
 
         System.out.println("-----------------------------------------");
+    }
+
+    public String toString(){
+        return "Naked Pair has eliminated " + count + " and has taken " + totalTime/1000;
     }
 }

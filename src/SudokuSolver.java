@@ -19,12 +19,6 @@ public class SudokuSolver {
     }
 
     private void initializeStrategy() {
-        //new BoxReductionStrategy()
-        //new PointingPairStrategy(),
-        //, new HiddenSingleStrategy()
-        //new BlockEliminationStrategy());
-        //new ColumnEliminationStrategy()
-        //new RowEliminationStrategy()
         solvingStrategies = Arrays.asList(new RowEliminationStrategy(), new ColumnEliminationStrategy(),
                 new BlockEliminationStrategy(), new HiddenSingleStrategy(), new BoxReductionStrategy(), new NakedPairStrategy());
 
@@ -62,8 +56,9 @@ public class SudokuSolver {
             printPuzzle();
             puzzleIsSolved = isPuzzleSolved();
             if(puzzleIsSolved){
-                state =SudokuState.SOLVED;
+                state = SudokuState.SOLVED;
                 puzzleIsSolved = true;
+                solvedPuzzle.add(new SolvedPuzzle(sudokuPuzzle, solvingStrategies));
                 break;
             }
         }
